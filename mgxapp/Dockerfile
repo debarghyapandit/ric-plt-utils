@@ -25,7 +25,7 @@
 # package versions and locations for easier maintenance
 ARG RMR_VER=4.1.4
 ARG LOG_VER=0.0.4
-ARG FRAME_VER=2.1.0
+ARG FRAME_VER=2.2.0
 
 ARG PROD_URL_BASE=https://packagecloud.io/o-ran-sc/release/packages/debian/stretch/
 ARG BETA_URL_BASE=https://packagecloud.io/o-ran-sc/staging/packages/debian/stretch/
