@@ -71,7 +71,7 @@ RUN    rm -fr .build \
 	&& mkdir .build \
 	&& cd .build \
 	&& cmake .. \
-	&& make install
+	&& make test ARGS="-V"
 
 # copy only needed stuff to smaller image (no build bloat)
 FROM ubuntu:18.04
