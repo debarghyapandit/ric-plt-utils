@@ -28,7 +28,7 @@
 
 #include <memory>
 
-#include "jhash.hpp"
+#include "ricxfcpp/jhash.hpp"
 #include "config.h"			// things under test to build with coverage options
 #include "config.cpp"
 
