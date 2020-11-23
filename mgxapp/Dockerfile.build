@@ -3,6 +3,7 @@
 #==================================================================================
 #    Copyright (c) 2020 AT&T Intellectual Property.
 #    Copyright (c) 2020 Nokia
+#    Copyright (c) 2020 HCL Technologies
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -60,10 +61,12 @@ RUN    wget --content-disposition ${LOG_BASE}/mdclog_${LOG_VER}-1_amd64.deb/down
         && wget --content-disposition ${FRAME_BASE}/ricxfcpp-dev_${FRAME_VER}_amd64.deb/download.deb  \
         && dpkg -i *deb
 
-
-
 WORKDIR /playpen/build
 COPY ./ ./
+RUN ls -lR
+RUN cp ./CMakeLists.txt /playpen/build/mgxapp
+
+
 
 # build the utility; installs into /usr/local/bin
 #
@@ -72,4 +75,20 @@ RUN    rm -fr .build \
         && cd .build \
         && cmake .. \
         && make install \
-        && make test ARGS="-V"
+        && make test
+
+ARG build_dir=build
+ARG build_wrap_dir=bw-output
+ARG cmake_opts=
+ARG INSTALL_PREFIX=build/output
+RUN cd /tmp || exit 1
+RUN     wget -q -O bw.zip https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip \
+                && apt-get install -y apt-utils \
+                && apt-get install zip unzip -y \
+                && unzip -q bw.zip \
+                && mv build-wrapper-* /opt/build-wrapper \
+                && mkdir -p $build_dir \
+                && cd $build_dir || exit 1 \
+                && eval cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX $cmake_opts .. \
+                && /opt/build-wrapper/build-wrapper-linux-x86-64 --out-dir $build_wrap_dir make test ARGS=-V
+
